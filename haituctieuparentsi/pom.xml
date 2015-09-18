@@ -4,4 +4,9 @@
   <artifactId>haituctieuparentsi</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
+  <modules>
+  	<module>haituctieusi-persitence</module>
+  	<module>haitutieusi-schedualingvideo</module>
+  	<module>haituctieusi-schedualingpicture</module>
+  </modules>
 </project>

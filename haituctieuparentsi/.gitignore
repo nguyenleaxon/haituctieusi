@@ -1,0 +1,15 @@
+*.class
+/target
+*/target
+/.settings
+*/.settings
+*/.externalToolBuilders
+.classpath
+.project
+*/.idea
+*/.pmd
+/pom.xml
+.idea
+/*.iml
+/*/*.iml
+
