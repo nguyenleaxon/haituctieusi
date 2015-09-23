@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://www.springframework.org/schema/integration" 
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd 
+	http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+
+	<!-- intercept and log every message -->
+	<logging-channel-adapter id="logger" level="DEBUG" />
+	<!-- <wire-tap channel="logger" /> -->
+
+	<channel id="getAllYouTubeChannel" />
+
+	<gateway id="videosGateway"
+		service-interface="com.nguyenle.gotoagilevn.mumandchild.schedual.VideoChannelGateway">
+		<method name="getAllVideoChanelsFromDB" request-channel="getAllYouTubeChannel" />
+	</gateway>
+
+	<splitter input-channel="getAllYouTubeChannel" output-channel="getAllVideosFromOneYoutubeChannel" />
+
+
+	<beans:bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<beans:constructor-arg name="mongo" ref="mongo" />
+		<beans:constructor-arg name="databaseName" value="mumandkid" />
+	</beans:bean> <!-- Factory bean that creates the Mongo instance -->
+	<beans:bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
+		<beans:property name="host" value="localhost" />
+	</beans:bean>
+	 <!-- Use this post processor to translate any MongoExceptions thrown in @Repository 
+		annotated classes -->
+	<beans:bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<mongo:repositories base-package="com.nguyenle.gotoagilevn.mumandchild.persistence.repository" />
+	
+</beans:beans>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * Copyright 2012 the original author or authors. * * Licensed under 
+	the Apache License, Version 2.0 (the "License"); * you may not use this file 
+	except in compliance with the License. * You may obtain a copy of the License 
+	at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required by 
+	applicable law or agreed to in writing, software * distributed under the 
+	License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. * See the License for the specific 
+	language governing permissions and * limitations under the License. -->
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/integration"
+	xmlns:jms="http://www.springframework.org/schema/integration/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd 
+						http://www.springframework.org/schema/integration 
+						http://www.springframework.org/schema/integration/spring-integration.xsd
+						http://www.springframework.org/schema/integration/jms
+						http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
+						
+	">
+
+	<annotation-config />
+
+	<channel id="getAllVideosFromOneYoutubeChannel" />
+	<service-activator input-channel="getAllVideosFromOneYoutubeChannel"
+		output-channel="crawlingVideosFromChannel" ref="singleYoutubeChannelServiceActivator" />
+
+	<channel id="crawlingVideosFromChannel" />
+	<service-activator input-channel="crawlingVideosFromChannel"
+		output-channel="videosFromChannel" ref="clawingVideoServiceActivator" />
+
+
+	<channel id="videosFromChannel" />
+	<service-activator input-channel="videosFromChannel"
+		output-channel="incomeVideoSplitter" ref="gettingAllVideosFromChannelServiceActivator" />
+
+
+	<splitter input-channel="incomeVideoSplitter" output-channel="savingDB" />
+	<channel id="outgoing-splitter">
+		<dispatcher task-executor="taskExecutor" />
+	</channel>
+
+	<beans:bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<!-- Use 1 for sequential processing -->
+		<beans:property name="corePoolSize" value="1" />
+		<beans:property name="maxPoolSize" value="1" />
+		<beans:property name="threadNamePrefix" value="Splitter Message Handler " />
+		<beans:property name="waitForTasksToCompleteOnShutdown"
+			value="true" />
+	</beans:bean>
+
+<!-- 	<transformer input-channel="transformVideo" output-channel="savingDB" -->
+<!-- 		method="addCategoryProperties" ref="addCategoryPropertiesTransform" /> -->
+
+
+	<channel id="savingDB" />
+	<jms:outbound-channel-adapter id="jmsout"
+		channel="savingDB" destination="requestQueueMumandKid" />
+
+	<beans:bean id="connectionFactory"
+		class="org.apache.activemq.ActiveMQConnectionFactory">
+		<beans:property name="brokerURL" value="vm://localhost" />
+	</beans:bean>
+
+	<jms:message-driven-channel-adapter
+		id="jmsInMumandKid" destination="requestQueueMumandKid" channel="jmsInChannelMumandKid" />
+
+	<channel id="jmsInChannelMumandKid" />
+	<service-activator input-channel="jmsInChannelMumandKid"
+		ref="jmsServiceActivator" />
+
+	<beans:bean id="requestQueueMumandKid" class="org.apache.activemq.command.ActiveMQTopic">
+		<beans:constructor-arg name="name" value="test.topic" />
+	</beans:bean>
+</beans:beans>
