@@ -18,6 +18,7 @@ public class Video implements Serializable {
 	private String url;
 	private String unicodeName;
     private String channelURL;
+    private boolean isVideo;
 
 	@DBRef
 	private VideoChannel channel;
@@ -84,6 +85,14 @@ public class Video implements Serializable {
 
 	public void setChannelURL(String channelURL) {
 		this.channelURL = channelURL;
+	}
+
+	public boolean isVideo() {
+		return isVideo;
+	}
+
+	public void setVideo(boolean isVideo) {
+		this.isVideo = isVideo;
 	}
 
 }

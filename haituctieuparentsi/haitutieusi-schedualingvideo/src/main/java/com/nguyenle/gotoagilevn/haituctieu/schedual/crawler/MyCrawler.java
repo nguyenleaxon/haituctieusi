@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.nguyenle.gotoagilevn.haituctieu.persistence.service.VideoChannelService;
 import com.nguyenle.gotoagilevn.haituctieu.persistence.vo.Video;
 
 import edu.uci.ics.crawler4j.crawler.Page;
@@ -102,12 +101,13 @@ public class MyCrawler extends WebCrawler {
 			if (validateURLFormatVideo(matcher.group(2))) {
 				String[] image = matcher.group(2).split("=");
 				String[] name = matcher.group(1).split("\"");
-				Video food = new Video();
-				food.setName(name[0]);
-		    	food.setUrl(image[1]);
-				food.setImage("//i.ytimg.com/vi/" + image[1] + "/mqdefault.jpg");
-				food.setChannelURL(channel);
-				foodMap.put(matcher.group(1), food);
+				Video video = new Video();
+				video.setVideo(true);
+				video.setName(name[0]);
+		    	video.setUrl(image[1]);
+				video.setImage("//i.ytimg.com/vi/" + image[1] + "/mqdefault.jpg");
+				video.setChannelURL(channel);
+				foodMap.put(matcher.group(1), video);
 			}
 		}
 	}
@@ -122,12 +122,13 @@ public class MyCrawler extends WebCrawler {
 				String[] elements = match.split("\"");
 				String imageElement = matcher.group(1);
 	        	String[] images = imageElement.split("=");
-	        	Video food = new Video();
-				food.setName(elements[0]);
-				food.setChannelURL(channel);
-				food.setUrl(images[1]);
-				food.setImage("//i.ytimg.com/vi/" + images[1] + "/default.jpg");
-				foodMap.put(matcher.group(1), food);
+	        	Video video = new Video();
+	        	video.setVideo(true);
+				video.setName(elements[0]);
+				video.setChannelURL(channel);
+				video.setUrl(images[1]);
+				video.setImage("//i.ytimg.com/vi/" + images[1] + "/default.jpg");
+				foodMap.put(matcher.group(1), video);
 			}
 
 		}

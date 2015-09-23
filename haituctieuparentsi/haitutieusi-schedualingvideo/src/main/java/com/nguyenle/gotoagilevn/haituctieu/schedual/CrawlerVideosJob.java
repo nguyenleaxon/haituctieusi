@@ -26,8 +26,8 @@ public class CrawlerVideosJob {
 	@Autowired
 	VideoChannelService channelService;
 
-	//@Scheduled(fixedRate = 4000)
-	@Scheduled(cron = "0 29 23 * * *")
+	@Scheduled(fixedRate = 4000)
+	//@Scheduled(cron = "0 29 23 * * *")
 	public void scheduleVideoHandling() {
 		Collection<VideoChannel> videoChannel = getAllVideoChannelsFromDatabase();
 		videoChannelGateway.getAllVideoChanelsFromDB(videoChannel);

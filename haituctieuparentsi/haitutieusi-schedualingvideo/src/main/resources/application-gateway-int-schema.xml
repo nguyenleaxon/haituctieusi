@@ -14,7 +14,7 @@
 	<channel id="getAllYouTubeChannel" />
 
 	<gateway id="videosGateway"
-		service-interface="com.nguyenle.gotoagilevn.mumandchild.schedual.VideoChannelGateway">
+		service-interface="com.nguyenle.gotoagilevn.haituctieu.schedual.VideoChannelGateway">
 		<method name="getAllVideoChanelsFromDB" request-channel="getAllYouTubeChannel" />
 	</gateway>
 
@@ -23,7 +23,7 @@
 
 	<beans:bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<beans:constructor-arg name="mongo" ref="mongo" />
-		<beans:constructor-arg name="databaseName" value="mumandkid" />
+		<beans:constructor-arg name="databaseName" value="haituctieu" />
 	</beans:bean> <!-- Factory bean that creates the Mongo instance -->
 	<beans:bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
 		<beans:property name="host" value="localhost" />
@@ -33,6 +33,6 @@
 	<beans:bean
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
-	<mongo:repositories base-package="com.nguyenle.gotoagilevn.mumandchild.persistence.repository" />
+	<mongo:repositories base-package="com.nguyenle.gotoagilevn.haituctieu.persistence.repository" />
 	
 </beans:beans>

@@ -8,7 +8,7 @@
 	<import resource="single-channel-int-schema.xml" />
 
 
-	<context:component-scan base-package="com.nguyenle.gotoagilevn.mumandchild" />
+	<context:component-scan base-package="com.nguyenle.gotoagilevn.haituctieu" />
 
 
 	<task:executor id="executor" pool-size="10" />
